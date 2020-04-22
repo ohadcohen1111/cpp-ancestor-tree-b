@@ -1,4 +1,6 @@
 # include "FamilyTree.hpp"
+# include <stack>
+
 using namespace family;
 
 
@@ -233,7 +235,10 @@ void Tree :: remove(string name)
 {
     if(t->name == name)
     {
-        del(t);
+        //int rel = relationHelp(t, name, 1);
+        string r = find(name);
+        del(t, r);
+
         return;
     }
 
@@ -245,7 +250,7 @@ void Tree :: remove(string name)
 
     else if(t->father != NULL)
     {
-        removeFind(t->father, name);
+        removeFind(t->father, name); 
     }
 
     else if(t->mother != NULL)
@@ -255,17 +260,20 @@ void Tree :: remove(string name)
 
 }
 
-void Tree :: del(Tree * t)
+void Tree :: del(Tree * t, string relation)
 {
     if(t == NULL)
     {
     return;
     }
-
-    del(t->father);
-    del(t->mother);
-
+    
+    del(t->father, relation);
+    del(t->mother, relation);
+    
     delete(t);
+    relation.find("father") ? 
+    this->father = NULL :
+    this->mother = NULL;
 }
 
 
@@ -321,7 +329,8 @@ int Tree :: findHelp(Tree * T,string name, int level)
        if (name == "grandmother")
        {
            findName = T->mother->name;
-       }else
+       }
+       else
        {
            findName = T->father->name;
        }       
@@ -347,6 +356,7 @@ int main()
     t->addFather("Tzvi", "F-Tzvi");
     t->addMother("Tzvi", "M-Tzvi");
     t->display();
-    t->remove("t");
+    t->remove("Tzipi");
+    cout << "--------After Remove--------" << endl;
     t->display();
 }
