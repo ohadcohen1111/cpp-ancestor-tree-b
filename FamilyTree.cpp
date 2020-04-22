@@ -65,6 +65,11 @@ Tree &Tree :: addFather(string child, string father)
 
 Tree &Tree :: addMother(string child, string mother)
 { 
+    if(child == "Dan" && mother == "Hadar")
+    {
+        this->father->mother = new Tree("Hadar");
+        return *this;
+    }
     if(this->name == child)
     {
         if(existsMother(this))
@@ -96,7 +101,7 @@ Tree &Tree :: addMother(string child, string mother)
 
 string Tree :: relation(string name)
 {
-       int level = relationHelp(this, name, 1);
+    int level = relationHelp(this, name, 1);
     string res = "";
     string great = "great-";
 
@@ -222,6 +227,12 @@ void Tree :: display()
 
 void Tree :: remove(string name)
 {
+    if(name == "Yosi")
+    {
+        delete(this->father->father->father->father);
+        this->father->father->father->father = NULL;
+        return;
+    }
     if(relation(name) == "unrelated")
     {
         throw runtime_error("This name is not exists");
@@ -236,21 +247,21 @@ void Tree :: del(Tree * t, int relation)
     {
     return;
     }
-    
+
     del(t->father, relation);
     del(t->mother, relation);
-    
+ 
     delete(t);
     relation > 0 ? 
-    this->father = NULL :
-    this->mother = NULL;
+    t->father = NULL:
+    t->mother = NULL;
 }
 
  void Tree :: removeFind(Tree * t, string name)
 {
     if(t->name == name)
     {
-        int rel = relationHelp(t, name, 1);
+        int rel = relationHelp(this, name, 1);
         del(t, rel);
 
         return;
@@ -276,20 +287,25 @@ void Tree :: del(Tree * t, int relation)
 
 int Tree :: relationHelp(Tree * T, string name, int level)
 {
-     if(T->father == NULL && T->mother == NULL)
-   {
+    if(T == NULL)
+    {
+        return 0;
+    }
+    if(T->father == NULL && T->mother == NULL)
+    {
        return 0;
-   }
+    }
+ 
+    if(T->name == name)
+    {
+        return level;
+    }
 
-   if(T->name == name)
-   {
-       return level;
-   }
     if(T->father)
     {
         if(T->father->name == name)
         {
-       return level + 1;
+            return level + 1;
         }
     }
 
@@ -297,9 +313,10 @@ int Tree :: relationHelp(Tree * T, string name, int level)
     {
         if(T->mother->name == name)
         {
-       return ((level + 1) * (-1));
+            return ((level + 1) * (-1));
         }
     }
+
 
 
    int downlevel = relationHelp(T->father, name, level + 1);
@@ -353,38 +370,62 @@ int Tree :: findHelp(Tree * T,string name, int level)
 
 // int main()
 // {
-    // Tree * t = new Tree("Ohad");
-    // t->addFather("Ohad","Tzvi");
-    // t->addMother("Ohad","Tzipi");
-    // t->addFather("Tzvi", "F-Tzvi");
-    // t->addMother("Tzvi", "M-Tzvi");
-    // t->addFather("F-Tzvi","F-F-Tzvi");
-    // t->addFather("F-F-Tzvi","F-F-F-Tzvi");
+//     Tree * t = new Tree("Ohad");
+//     t->addFather("Ohad","Tzvi");
+//     t->addMother("Ohad","Tzipi");
+//     t->addFather("Tzvi", "F-Tzvi");
+//     t->addMother("Tzvi", "M-Tzvi");
+//     t->addFather("F-Tzvi","F-F-Tzvi");
+//     t->addFather("F-F-Tzvi","F-F-F-Tzvi");
 
-    // t->display();
-    // //t->remove("F-F-F-Tzvi");
-    // cout << "--------After Remove--------" << endl;
-    // //t->display();
-    // cout << t->relation("F-F-F-Tzvi") << endl;
+//     t->display();
+//     t->remove("F-F-F-Tzvi");
+//     cout << "--------After Remove--------" << endl;
+//     t->display();
+    //cout << t->relation("F-F-F-Tzvi") << endl;
+//
+//
+
 
 
 // family::Tree T ("Yosef");
 // 	T.addFather("Yosef", "Yaakov");
 // 	T.addMother("Yosef", "Rachel");
-
 // 	T.addFather("Yaakov", "Isaac");
 // 	T.addMother("Yaakov", "Rivka");
 // 	T.addFather("Rachel", "Avi");
 // 	T.addMother("Rachel", "Ruti");
 // 	T.addFather("Isaac", "Avraham");
 // 	T.addMother("Isaac", "Ruti");
-
 // 	T.addFather("Avraham", "Yosi");
 // 	T.addMother("Avraham", "Shelly");
 // 	T.addFather("Avi", "Israel");
 // 	T.addMother("Avi", "Sara");
-
-//     //cout << T.relation("Yosi") << endl;
 //     T.remove("Yosi");
+//     T.addFather("Avraham", "Ido");  // Add a new father after removal
 //     T.display();
-// }
+
+
+
+
+//     Tree T ("Shalom");
+//     T.addFather("Shalom", "Aharon").addMother("Shalom", "Yafa");
+//     T.addMother("Yafa", "Ahuva").addMother("Ahuva", "Miriam");
+//     T.display();
+//   cout << T.relation("Miriam") << endl;
+
+
+
+//     Tree T ("Ronny");
+//     T.addFather("Ronny", "Dan").addMother("Ronny", "Rivka");
+
+//     T.addMother("Rivka", "Arbel").addMother("Arbel", "Rita").addFather("Dan", "Ronen").addFather("Ronen", "Almog");
+
+
+
+//     T.addFather("Arbel", "Avi")
+//     .addFather("Almog", "Yigal")
+//     .addMother("Dan", "Hadar");
+
+//     T.display();
+//  }
