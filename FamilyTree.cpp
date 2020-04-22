@@ -11,13 +11,34 @@ Tree :: Tree(string name)
     findName = "";
 }
 
+bool Tree :: existsFather(Tree * t)
+{
+    if(t->father != NULL)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool Tree :: existsMother(Tree * t)
+{
+    if(t->mother != NULL)
+    {
+        return false;
+    }
+    return true;
+}
+
 Tree &Tree :: addFather(string child, string father)
 {
      if(this->name == child)
     {
+        if(existsFather(this))
+        {
         this->father = new Tree(father);
         return *this;
-       
+        }
+       throw runtime_error("already have a father");
     }
     else if(this->father == NULL && this->mother == NULL)
     {
@@ -45,8 +66,12 @@ Tree &Tree :: addMother(string child, string mother)
 { 
     if(this->name == child)
     {
+        if(existsMother(this))
+        {
         this->mother = new Tree(mother);
         return *this;
+        }
+        //throw runtime_error("already have a mother");
     }
     else if(this->father == NULL && this->mother == NULL)
     {
@@ -194,10 +219,53 @@ void Tree :: display()
 
 }
 
-
 void Tree :: remove(string name)
 {
+    if(relation(name) == "unrelated")
+    {
+        throw runtime_error("This name is not exists");
+    }
+    removeFind(this, name);
     return;
+}
+
+ void Tree :: removeFind(Tree * t, string name)
+{
+    if(t->name == name)
+    {
+        del(t);
+        return;
+    }
+
+    else if(t->father != NULL && t->mother != NULL)
+    {
+        removeFind(t->father, name); 
+        removeFind(t->mother, name);
+    }
+
+    else if(t->father != NULL)
+    {
+        removeFind(t->father, name);
+    }
+
+    else if(t->mother != NULL)
+    {
+        removeFind(t->mother, name);
+    }
+
+}
+
+void Tree :: del(Tree * t)
+{
+    if(t == NULL)
+    {
+    return;
+    }
+
+    del(t->father);
+    del(t->mother);
+
+    delete(t);
 }
 
 
@@ -269,4 +337,16 @@ int Tree :: findHelp(Tree * T,string name, int level)
     downlevel =  findHelp(T->mother,name, level-1);
 
     return downlevel;
+}
+
+int main()
+{
+    Tree * t = new Tree("Ohad");
+    t->addFather("Ohad","Tzvi");
+    t->addMother("Ohad","Tzipi");
+    t->addFather("Tzvi", "F-Tzvi");
+    t->addMother("Tzvi", "M-Tzvi");
+    t->display();
+    t->remove("t");
+    t->display();
 }
