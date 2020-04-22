@@ -285,16 +285,22 @@ int Tree :: relationHelp(Tree * T, string name, int level)
    {
        return level;
    }
-
-    if(T->father->name == name)
-   {
+    if(T->father)
+    {
+        if(T->father->name == name)
+        {
        return level + 1;
-   }
+        }
+    }
 
-    if(T->mother->name == name)
-   {
+    if(T->mother)
+    {
+        if(T->mother->name == name)
+        {
        return ((level + 1) * (-1));
-   }
+        }
+    }
+
 
    int downlevel = relationHelp(T->father, name, level + 1);
 
@@ -345,18 +351,40 @@ int Tree :: findHelp(Tree * T,string name, int level)
     return downlevel;
 }
 
-int main()
-{
-    Tree * t = new Tree("Ohad");
-    t->addFather("Ohad","Tzvi");
-    t->addMother("Ohad","Tzipi");
-    t->addFather("Tzvi", "F-Tzvi");
-    t->addMother("Tzvi", "M-Tzvi");
-    t->addFather("F-Tzvi","F-F-Tzvi");
-    t->addFather("F-F-Tzvi","F-F-F-Tzvi");
+// int main()
+// {
+    // Tree * t = new Tree("Ohad");
+    // t->addFather("Ohad","Tzvi");
+    // t->addMother("Ohad","Tzipi");
+    // t->addFather("Tzvi", "F-Tzvi");
+    // t->addMother("Tzvi", "M-Tzvi");
+    // t->addFather("F-Tzvi","F-F-Tzvi");
+    // t->addFather("F-F-Tzvi","F-F-F-Tzvi");
 
-    t->display();
-    t->remove("F-F-F-Tzvi");
-    cout << "--------After Remove--------" << endl;
-    t->display();
-}
+    // t->display();
+    // //t->remove("F-F-F-Tzvi");
+    // cout << "--------After Remove--------" << endl;
+    // //t->display();
+    // cout << t->relation("F-F-F-Tzvi") << endl;
+
+
+// family::Tree T ("Yosef");
+// 	T.addFather("Yosef", "Yaakov");
+// 	T.addMother("Yosef", "Rachel");
+
+// 	T.addFather("Yaakov", "Isaac");
+// 	T.addMother("Yaakov", "Rivka");
+// 	T.addFather("Rachel", "Avi");
+// 	T.addMother("Rachel", "Ruti");
+// 	T.addFather("Isaac", "Avraham");
+// 	T.addMother("Isaac", "Ruti");
+
+// 	T.addFather("Avraham", "Yosi");
+// 	T.addMother("Avraham", "Shelly");
+// 	T.addFather("Avi", "Israel");
+// 	T.addMother("Avi", "Sara");
+
+//     //cout << T.relation("Yosi") << endl;
+//     T.remove("Yosi");
+//     T.display();
+// }
