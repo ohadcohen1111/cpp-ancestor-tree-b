@@ -25,7 +25,7 @@ class Tree
         int findHelp(Tree * T,string name, int level);
         bool existsFather(Tree * t);
         bool existsMother(Tree * t);
-        void del(Tree * t, string relation);
+        void del(Tree * t, int relation);
         void removeFind(Tree * t, string name);
     };
 };

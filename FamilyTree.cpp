@@ -1,5 +1,4 @@
 # include "FamilyTree.hpp"
-# include <stack>
 
 using namespace family;
 
@@ -73,7 +72,7 @@ Tree &Tree :: addMother(string child, string mother)
         this->mother = new Tree(mother);
         return *this;
         }
-        //throw runtime_error("already have a mother");
+        throw runtime_error("already have a mother");
     }
     else if(this->father == NULL && this->mother == NULL)
     {
@@ -231,13 +230,28 @@ void Tree :: remove(string name)
     return;
 }
 
+void Tree :: del(Tree * t, int relation)
+{
+    if(t == NULL)
+    {
+    return;
+    }
+    
+    del(t->father, relation);
+    del(t->mother, relation);
+    
+    delete(t);
+    relation > 0 ? 
+    this->father = NULL :
+    this->mother = NULL;
+}
+
  void Tree :: removeFind(Tree * t, string name)
 {
     if(t->name == name)
     {
-        //int rel = relationHelp(t, name, 1);
-        string r = find(name);
-        del(t, r);
+        int rel = relationHelp(t, name, 1);
+        del(t, rel);
 
         return;
     }
@@ -259,23 +273,6 @@ void Tree :: remove(string name)
     }
 
 }
-
-void Tree :: del(Tree * t, string relation)
-{
-    if(t == NULL)
-    {
-    return;
-    }
-    
-    del(t->father, relation);
-    del(t->mother, relation);
-    
-    delete(t);
-    relation.find("father") ? 
-    this->father = NULL :
-    this->mother = NULL;
-}
-
 
 int Tree :: relationHelp(Tree * T, string name, int level)
 {
@@ -355,8 +352,11 @@ int main()
     t->addMother("Ohad","Tzipi");
     t->addFather("Tzvi", "F-Tzvi");
     t->addMother("Tzvi", "M-Tzvi");
+    t->addFather("F-Tzvi","F-F-Tzvi");
+    t->addFather("F-F-Tzvi","F-F-F-Tzvi");
+
     t->display();
-    t->remove("Tzipi");
+    t->remove("F-F-F-Tzvi");
     cout << "--------After Remove--------" << endl;
     t->display();
 }
